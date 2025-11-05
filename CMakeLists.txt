@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.16.3)
 project(T_CPP VERSION 0.1.0 LANGUAGES C CXX)
 
+set(CMAKE_BUILD_TYPE Debug)
+
 add_subdirectory(src/Template/)
 
 set(LIB_LIST )
