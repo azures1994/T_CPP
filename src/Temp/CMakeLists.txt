@@ -1,0 +1,19 @@
+project( VERSION 0.1.0 LANGUAGES C CXX)
+
+set(LIB_LIST )
+set(SRC_LIST )
+
+list(APPEND SRC_LIST main.cpp)
+
+message(STATUS "[${PROJECT_NAME}] SRC_LIST: ${SRC_LIST}")
+message(STATUS "[${PROJECT_NAME}] LIB_LIST: ${LIB_LIST}")
+add_executable(${PROJECT_NAME} ${SRC_LIST})
+target_link_libraries(${PROJECT_NAME} ${LIB_LIST})
+
+# message(STATUS "CMAKE_SOURCE_DIR: ${CMAKE_SOURCE_DIR}")
+# message(STATUS "CMAKE_CURRENT_SOURCE_DIR: ${CMAKE_CURRENT_SOURCE_DIR}")
+set_target_properties(${PROJECT_NAME} PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin/)
+
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config.h.in ${CMAKE_CURRENT_SOURCE_DIR}/config.h)
+
+
