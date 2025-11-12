@@ -1,4 +1,8 @@
 #include <iostream>
+#include <vector>
+#include <list>
+
+#include "Template.h"
 
 enum class COLOR{
     RED,
@@ -39,7 +43,9 @@ void print(Args... args){
     // int array[] = {(printData(args), 0)...};
     // std::cout << std::endl;
 
-    //! 2
+    // (printData(args), ...);
+
+    // //! 2
     print_impl(args...);
 }
 
@@ -89,6 +95,42 @@ void StudentInfo<_Ty1, _Ty2, _Ty3, _U>::print(){
     std::cout << _s1 << "\t" << _s2 << "\t" << _s3 << std::endl;
 }
 
+template <int N>
+struct Factorial{
+    static const int value = N * Factorial<N-1>::value;
+};
+
+template <>
+struct Factorial<0>{
+    static const int value = 1;
+};
+
+template <int N>
+struct Fibonacci{
+    static const int value = Fibonacci<N-1>::value + Fibonacci<N-2>::value;
+};
+
+template <>
+struct Fibonacci<0>{
+    static const int value = 0;
+};
+
+template <>
+struct Fibonacci<1>{
+    static const int value = 1;
+};
+
+template <int N, int... Ns>
+struct Sum{
+    static const int value = N + Sum<Ns...>::value;
+};
+
+template <int N>
+struct Sum<N>{
+    static const int value = N;
+};
+
+
 int main(int argc, char* argv[]){
 
     printf("****** %s ******\n", PROJECT_NAME);
@@ -96,12 +138,12 @@ int main(int argc, char* argv[]){
     COLOR color = COLOR::RED;
     std::cout << color << std::endl; //! Overload operator<< for enum COLOR
 
-    //! Function Templates
-    printf("\n====== Function Templates ======\n");
+    //! 1. Function Templates
+    printf("\n====== 1. Function Templates ======\n");
     print(123, "Hello", color, 3.14, 'z');
 
-    //! Class Templates
-    printf("\n====== Class Templates ======\n");
+    //! 2. Class Templates
+    printf("\n====== 2. Class Templates ======\n");
     Info<int, std::string, double> info1(1, "Jack", 90.5);
     info1.print();
 
@@ -113,6 +155,67 @@ int main(int argc, char* argv[]){
 
     Info<int, std::string, double>* info_b = new StudentInfo<int, std::string, double, double>(4, "Lucy", 70, 90, 85, 80);
     info_b->print();
+
+    //! 3. Template Template Parameters
+    std::vector<int> v1 = {1, 2, 3, 4, 5};
+    std::list<int> l1 = {22, 33, 44, 55, 66};
+
+    // ContainerPrinter<std::vector, int> _containerPrinter1(v1);
+    // _containerPrinter1.print();
+
+    // ContainerPrinter<std::list, int> _containerPrinter2(l1);
+    // _containerPrinter2.print();
+
+    ContainerPrinter<std::vector, int>::print(v1);
+    ContainerPrinter<std::list, int>::print(l1);
+
+    printf("\n====== Function specialization ======\n");
+    printValue(1);
+    printValue(2.5);
+    printValue(std::string("Hello Function Template!"));
+
+    int a = 10;
+    int b = 20;
+    const int* pA = &a;
+    printValue(pA);
+    printValue(&a);
+
+    pA = &b;
+    printValue(pA);
+    printValue(&b);
+
+    coutAll(3, 3.45, "Hello World!");
+
+    //! 4. SFINAE£¨Substitution Failure Is Not An Error£©
+    printf("\n====== 4. SFINAE (Substitution Failure Is Not An Error) ======\n");
+    int a4 = 100;
+    print_type(a4);
+    print_type(3.3);
+    print_type("Hello C-style");
+    print_type(std::string("Hello std::string"));
+    print_type(&a4);
+    float b4 = 3.12;
+    print_type(&b4);
+
+    double c4 = 7.22;
+    print_type(c4);
+
+    // int
+    std::vector<int>::value_type d4 = 100;
+    std::cout << "d4: " << d4 << std::endl;
+
+    //! 5. Template Metaprogramming
+    printf("\n====== 5. Template Metaprogramming ======\n");
+    std::cout << "5! = " << Factorial<5>::value << std::endl;
+    std::cout << "3! = " << Factorial<3>::value << std::endl;
+    std::cout << "0! = " << Factorial<0>::value << std::endl;
+
+    std::cout << "Fibonacci<5> = " << Fibonacci<5>::value << std::endl;
+    std::cout << "Fibonacci<10> = " << Fibonacci<10>::value << std::endl;
+
+    std::cout << "Sum<1, 2, 3, 4, 5>::value = " << Sum<1, 2, 3, 4, 5>::value << std::endl;
+    std::cout << "Sum<0> = " << Sum<0>::value << std::endl;
+    std::cout << "Sum<0, 1> = " << Sum<0, 1>::value << std::endl;
 
     return 0;
 }
