@@ -5,6 +5,7 @@ set(CMAKE_BUILD_TYPE Debug)
 
 add_subdirectory(src/Template/)
 add_subdirectory(src/rvalue/)
+add_subdirectory(src/volatile/)
 
 set(LIB_LIST )
 set(SRC_LIST )
