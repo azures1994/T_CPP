@@ -4,6 +4,7 @@ project(T_CPP VERSION 0.1.0 LANGUAGES C CXX)
 set(CMAKE_BUILD_TYPE Debug)
 
 add_subdirectory(src/Template/)
+add_subdirectory(src/rvalue/)
 
 set(LIB_LIST )
 set(SRC_LIST )
