@@ -1,5 +1,6 @@
 #include <iostream>
 #include <utility>
+#include <memory>
 
 int& get_ref() {
     static int value = 10;
@@ -14,6 +15,77 @@ auto f1(){
 //! C++14
 decltype(auto) f2(){
     return get_ref();
+}
+
+void process(std::unique_ptr<int>&& ptr) {
+    if (ptr) std::cout << *ptr << std::endl;
+}
+
+int test_20260109(){
+
+    int x = 10;
+    int&& rref1 = std::move(x);
+    printf("rref1: %d\n", rref1);
+    std::cout << "rref1: " << rref1 << std::endl;
+
+    printf("x: %d\n", x);
+    x = 20;
+    printf("x: %d\n", x);
+    std::cout << "rref1: " << rref1 << std::endl;
+
+    //! ################################################################ 
+
+    std::unique_ptr<int> p(new int(10)); // p是左值
+    process(std::move(p));
+    
+    if(p.get() == nullptr){
+        printf("p.get() == nullptr \n");
+    }
+
+    *p = 20;
+    std::cout << "*p: " << *p << std::endl;
+
+    //! ##############################################################
+    const char* str = "test";
+    std::cout << &"test" << std::endl;
+    std::cout << str << std::endl;
+
+    //! ###############################################################
+    int a = 10;
+    int& b = a;
+    printf("&a: %p\n", &a);
+    printf("&b: %p\n", &b);
+
+    //! #############################################################
+
+    int z = 101;
+    std::cout << &z << std::endl;
+    // std::cout << &(z++) << std::endl;
+    std::cout << &(++z) << std::endl;
+
+    int&& rref_z = z++;
+    rref_z += 10;
+
+    printf("rref_z: %d\n", rref_z);
+    z++;
+    printf("rref_z: %d\n", rref_z);
+
+    //! ################################################################
+    const int& t = 11;
+    std::cout << "&t: " << &t << std::endl;
+
+    //! ################################################################# 
+    int c = 100;
+    int&& rref = std::move(c);
+
+    std::cout << "c: " << c << std::endl;
+    std::cout << "rref: " << rref << std::endl;
+    rref += 11;
+    std::cout << "c: " << c << std::endl;
+    std::cout << "rref: " << rref << std::endl;
+
+
+    return 0;
 }
 
 int main(int argc, char* argv[]){
@@ -67,6 +139,8 @@ int main(int argc, char* argv[]){
     int e2[5] = {1,2,3,4,5};
     decltype(e2) f2 = {10, 20, 30, 40, 50};
     f2[3] = 300;
+
+    test_20260109();
 
     return 0;
 }
