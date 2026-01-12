@@ -7,6 +7,7 @@ add_subdirectory(src/Template/)
 add_subdirectory(src/rvalue/)
 add_subdirectory(src/volatile/)
 add_subdirectory(src/MiniVector/)
+add_subdirectory(src/std_forward/)
 
 set(LIB_LIST )
 set(SRC_LIST )
